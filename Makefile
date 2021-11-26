@@ -1,6 +1,7 @@
 .PHONY: phony
 
-FIGURES = $(shell find . -name '*.svg')
+GRAPHVIZ_FILES = $(shell find ./graphviz -name '*.dot')
+FIGURES = $(shell find ./figures -name '*.svg')
 
 PANDOCFLAGS =                        \
   --table-of-contents                \
@@ -13,6 +14,10 @@ PANDOCFLAGS =                        \
   -V documentclass=report            \
   -V papersize=A5                    \
   -V geometry:margin=1in
+
+HTML_FLAGS =                         \
+	--template=./templates/book.html   \
+	--self-contained
 
 all: phony output/book.pdf
 
@@ -27,7 +32,10 @@ output/%.epub: %.md $(FIGURES) Makefile | output
 	pandoc $< -o $@ $(PANDOCFLAGS)
 
 output/%.html: %.md $(FIGURES) Makefile | output
-	pandoc $< -o $@ $(PANDOCFLAGS)
+	pandoc $< -o $@ $(HTML_FLAGS) $(PANDOCFLAGS)
+
+figures/%.svg: $(GRAPHVIZ_FILES)
+	dot -Tsvg $< -o $@
 
 output:
 	mkdir ./output
