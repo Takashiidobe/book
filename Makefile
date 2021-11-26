@@ -25,6 +25,9 @@ epub: phony output/book.epub
 
 html: phony output/book.html
 
+figures: phony
+	./bin/figures
+
 output/%.pdf: %.md $(FIGURES) Makefile | output
 	pandoc $< -o $@ $(PANDOCFLAGS)
 
@@ -33,9 +36,6 @@ output/%.epub: %.md $(FIGURES) Makefile | output
 
 output/%.html: %.md $(FIGURES) Makefile | output
 	pandoc $< -o $@ $(HTML_FLAGS) $(PANDOCFLAGS)
-
-figures/%.svg: $(GRAPHVIZ_FILES)
-	dot -Tsvg $< -o $@
 
 output:
 	mkdir ./output

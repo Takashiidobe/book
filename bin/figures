@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+for i in $(find ./graphviz -name '*.dot'); do
+  base=$(basename $i .dot)
+  out_name="./figures/$base.svg"
+  echo "Building $out_name"
+  dot -Tsvg $i -o $out_name
+done
